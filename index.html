@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mão na Massa - Conectando Profissionais e Contratantes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-container">
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="logo">
+            <h2><i class="fas fa-hands-helping"></i> Mão <span>na Massa</span></h2>
+            <small>quem sabe fazer | quem precisa contratar</small>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-outline" id="btnHome">🏠 Início</button>
+            <button class="btn-outline" id="btnLoginContratante">👤 Contratante</button>
+            <button class="btn-outline" id="btnLoginProfissional">🔧 Profissional</button>
+            <button class="btn-primary" id="btnPublicarServicoTop">➕ Publicar Serviço</button>
+        </div>
+    </header>
+
+    <!-- BANNER PRINCIPAL -->
+    <div class="banner-principal">
+        <div class="banner-content">
+            <i class="fas fa-industry"></i>
+            <h3>Espaço para Patrocinador Master</h3>
+            <p>Sua marca aqui - Alcance milhares de profissionais e contratantes</p>
+            <button class="btn-banner">Anuncie conosco</button>
+        </div>
+    </div>
+
+    <!-- BUSCA E CATEGORIAS -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-input">
+                <input type="text" id="searchInput" placeholder="Buscar serviços... (ex: pedreiro, encanador, eletricista)">
+                <button id="buscarBtn"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+        </div>
+        <div class="category-buttons" id="categoriasContainer"></div>
+    </div>
+
+    <!-- BANNER POR CATEGORIA -->
+    <div id="bannerCategoria" class="banner-categoria" style="display: none;">
+        <div class="banner-categoria-content">
+            <i class="fas fa-paint-roller"></i>
+            <span id="bannerCategoriaTexto">Anúncio segmentado para esta categoria</span>
+            <button class="btn-small">Comprar materiais</button>
+        </div>
+    </div>
+
+    <!-- OFERTAS DE SERVIÇOS -->
+    <div class="section-header">
+        <h3><i class="fas fa-tools"></i> Ofertas de Serviços</h3>
+        <span class="badge-info">Profissionais Premium visualizam contato completo e podem se candidatar</span>
+    </div>
+    <div id="servicesContainer" class="services-grid"></div>
+
+    <footer>
+        <div class="footer-content">
+            <p><i class="fas fa-leaf"></i> Mão na Massa - Conectando talentos e oportunidades</p>
+            <small>© 2026 - Transformando serviços</small>
+        </div>
+    </footer>
+</div>
+
+<!-- ==================== TELA DO CONTRATANTE (LOGIN) ==================== -->
+<div id="modalLoginContratante" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" data-modal="modalLoginContratante">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-user-circle"></i>
+            <h2>Área do Contratante</h2>
+        </div>
+        <p>Publique serviços e encontre os melhores profissionais da sua região</p>
+        
+        <div class="form-tabs">
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="cadastro">Cadastro</button>
+        </div>
+        
+        <div id="tabLogin" class="tab-content active">
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="contratanteEmail" placeholder="contratante@email.com">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="contratanteSenha" placeholder="********">
+            </div>
+            <button class="btn-primary" id="loginContratanteSubmit">Entrar</button>
+        </div>
+        
+        <div id="tabCadastro" class="tab-content">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nome completo</label>
+                <input type="text" id="contratanteNome" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="contratanteCadEmail" placeholder="email@exemplo.com">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Telefone</label>
+                <input type="text" id="contratanteTelefone" placeholder="(11) 99999-9999">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="contratanteCadSenha" placeholder="********">
+            </div>
+            <button class="btn-primary" id="cadastroContratanteSubmit">Criar conta</button>
+        </div>
+        
+        <p class="demo-note">Demo: qualquer email/senha funciona (simulação)</p>
+    </div>
+</div>
+
+<!-- ==================== TELA DO PROFISSIONAL COM PAINEL DE OFERTAS ==================== -->
+<div id="modalLoginProfissional" class="modal modal-large">
+    <div class="modal-content">
+        <span class="close-modal" data-modal="modalLoginProfissional">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-briefcase"></i>
+            <h2>Área do Profissional</h2>
+        </div>
+        
+        <div class="form-tabs">
+            <button class="tab-btn-prof active" data-prof-tab="login">Login</button>
+            <button class="tab-btn-prof" data-prof-tab="cadastro">Cadastrar-se</button>
+        </div>
+        
+        <div id="profLoginTab" class="tab-content active">
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email profissional</label>
+                <input type="email" id="profissionalEmail" placeholder="profissional@email.com">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="profissionalSenha" placeholder="********">
+            </div>
+            <button class="btn-primary" id="loginProfissionalSubmit">Entrar</button>
+        </div>
+        
+        <div id="profCadastroTab" class="tab-content">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nome completo</label>
+                <input type="text" id="profissionalNome" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-briefcase"></i> Profissão</label>
+                <input type="text" id="profissionalProfissao" placeholder="Ex: Eletricista, Pedreiro">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="profissionalCadEmail" placeholder="email@exemplo.com">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Telefone</label>
+                <input type="text" id="profissionalTelefone" placeholder="(11) 99999-9999">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Senha</label>
+                <input type="password" id="profissionalCadSenha" placeholder="********">
+            </div>
+            <button class="btn-primary" id="cadastroProfissionalSubmit">Cadastrar e Entrar</button>
+        </div>
+        
+        <!-- DASHBOARD DO PROFISSIONAL -->
+        <div id="profissionalDashboard" style="margin-top: 1.5rem; display: none;">
+            <div class="profile-summary">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <h3 id="profissionalNomeDisplay">Profissional</h3>
+                    <p id="profissionalProfissaoDisplay">Profissão não informada</p>
+                    <span id="planoStatusBadge" class="plano-badge">Gratuito</span>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="painel-tabs">
+                <button class="painel-tab active" data-painel-tab="meu-plano">📊 Meu Plano</button>
+                <button class="painel-tab" data-painel-tab="ofertas-especiais">🎁 Ofertas Especiais</button>
+                <button class="painel-tab" data-painel-tab="minhas-candidaturas">📝 Minhas Candidaturas</button>
+            </div>
+            
+            <div id="painelMeuPlano" class="painel-tab-content active">
+                <div class="premium-options">
+                    <div class="premium-card">
+                        <i class="fas fa-star"></i>
+                        <h4>Selo de Destaque</h4>
+                        <p>Apareça nas primeiras posições da busca</p>
+                        <button class="btn-premium-feature" data-feature="destaque" id="btnDestaque">Ativar (+R$19/mês)</button>
+                        <span class="feature-status" id="statusDestaque"></span>
+                    </div>
+                    <div class="premium-card">
+                        <i class="fas fa-globe"></i>
+                        <h4>Domínio Próprio</h4>
+                        <p>Link exclusivo: maonamassa.com/seu-nome</p>
+                        <button class="btn-premium-feature" data-feature="dominio" id="btnDominio">Ativar (+R$29/mês)</button>
+                        <span class="feature-status" id="statusDominio"></span>
+                        <div id="dominioLink" class="dominio-link" style="display: none;"></div>
+                    </div>
+                    <div class="premium-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Análise de Dados</h4>
+                        <p>Veja quem clicou no seu perfil e de quais bairros</p>
+                        <button class="btn-premium-feature" data-feature="analise" id="btnAnalise">Ativar (+R$39/mês)</button>
+                        <span class="feature-status" id="statusAnalise"></span>
+                    </div>
+                </div>
+                
+                <button id="upgradePremiumCompletoBtn" class="btn-premium-full">✨ Plano Premium Completo (R$ 79/mês)</button>
+                
+                <div class="analytics-section" id="analyticsSection" style="display: none;">
+                    <h4><i class="fas fa-chart-line"></i> Análise de Dados</h4>
+                    <div class="analytics-cards">
+                        <div class="analytics-card">
+                            <span class="analytics-number" id="visualizacoesPerfil">12</span>
+                            <span>Visualizações do perfil</span>
+                        </div>
+                        <div class="analytics-card">
+                            <span class="analytics-number" id="cliquesContato">5</span>
+                            <span>Cliques nos seus contatos</span>
+                        </div>
+                        <div class="analytics-card">
+                            <span class="analytics-number" id="bairrosOrigem">3</span>
+                            <span>Bairros de origem</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="premiumInfo" class="premium-info"></div>
+            </div>
+            
+            <div id="painelOfertasEspeciais" class="painel-tab-content">
+                <h4><i class="fas fa-gift"></i> Ofertas exclusivas para você, profissional!</h4>
+                <div id="ofertasEspeciaisContainer" class="ofertas-especiais-grid"></div>
+            </div>
+            
+            <div id="painelMinhasCandidaturas" class="painel-tab-content">
+                <h4><i class="fas fa-file-signature"></i> Serviços que você se candidatou</h4>
+                <div id="minhasCandidaturasList" class="applications-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL PUBLICAR SERVIÇO ==================== -->
+<div id="modalPublicarServico" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" data-modal="modalPublicarServico">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-plus-circle"></i>
+            <h2>Publicar nova Oferta de Serviço</h2>
+        </div>
+        
+        <form id="formPublicar">
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Categoria principal *</label>
+                    <select id="categoriaServico" required>
+                        <option value="">Selecione</option>
+                        <option value="Construção">Construção</option>
+                        <option value="Elétrica">Elétrica</option>
+                        <option value="Hidráulica">Hidráulica</option>
+                        <option value="Pintura">Pintura</option>
+                        <option value="Jardinagem">Jardinagem</option>
+                        <option value="Limpeza">Limpeza</option>
+                        <option value="Marcenaria">Marcenaria</option>
+                        <option value="Reformas">Reformas</option>
+                    </select>
+                </div>
+                <div class="form-group half">
+                    <label>Subcategoria</label>
+                    <select id="subcategoriaServico">
+                        <option value="Residencial">Residencial</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Predial">Predial</option>
+                        <option value="Urgente">Urgente</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome do serviço *</label>
+                <input type="text" id="nomeServico" required placeholder="Ex: Reforma de banheiro completo">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Estado</label>
+                    <input type="text" id="estadoServico" placeholder="SP">
+                </div>
+                <div class="form-group half">
+                    <label>Cidade</label>
+                    <input type="text" id="cidadeServico" placeholder="São Paulo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Bairro</label>
+                <input type="text" id="bairroServico" placeholder="Vila Mariana">
+            </div>
+            
+            <div class="form-group">
+                <label>Descrição detalhada</label>
+                <textarea rows="3" id="descricaoServico" placeholder="Descreva o serviço que está precisando..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Orçamento previsto (opcional)</label>
+                <input type="text" id="orcamento" placeholder="Ex: R$ 500 - R$ 1000">
+            </div>
+            
+            <button type="submit" class="btn-primary btn-large">Publicar Oferta</button>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== MODAL CANDIDATAR-SE ==================== -->
+<div id="modalCandidatar" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" data-modal="modalCandidatar">&times;</span>
+        <div class="modal-header">
+            <i class="fas fa-paper-plane"></i>
+            <h2>Candidatar-se ao Serviço</h2>
+        </div>
+        <p id="candidatarServicoNome"></p>
+        <div class="form-group">
+            <label>Sua proposta</label>
+            <textarea rows="3" id="mensagemCandidatura" placeholder="Apresente-se, fale sobre sua experiência e valor do serviço..."></textarea>
+        </div>
+        <button class="btn-primary" id="confirmarCandidatura">Enviar Proposta</button>
+        <p class="demo-note">✅ Profissionais Premium podem se candidatar a todas as vagas e visualizar contatos completos</p>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
